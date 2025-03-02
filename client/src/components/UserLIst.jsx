@@ -54,6 +54,10 @@ export default function UserList() {
 
         setUserIdInfo(userId)
     }
+    const userInfoCloseHandler = ()=>{
+
+        setUserIdInfo(null)
+    }
     
     return (
         <>
@@ -72,6 +76,7 @@ export default function UserList() {
                 {userIdInfo && (
                     <UserInfo
                     userId={userIdInfo}
+                    onClose={userInfoCloseHandler}
                     />)}
                 <div className="table-wrapper">
                     <div className="overlays">

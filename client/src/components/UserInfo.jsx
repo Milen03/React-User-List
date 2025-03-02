@@ -4,6 +4,7 @@ import { fromIsoDate } from "../utils/dataTimeUtils.js"
 
 export default function UserInfo({
     userId,
+    onClose
 }) {
     const [user, setUser] = useState({})
 
@@ -16,12 +17,12 @@ export default function UserInfo({
     return (
         <>
             <div className="overlay">
-                <div className="backdrop" />
+                <div className="backdrop" onClick={onClose}/>
                 <div className="modal">
                     <div className="detail-container">
                         <header className="headers">
                             <h2>User Detail</h2>
-                            <button className="btn close">
+                            <button className="btn close" onClick={onClose}>
                                 <svg
                                     aria-hidden="true"
                                     focusable="false"
