@@ -11,7 +11,11 @@ import UserCreate from "./UserCreate.jsx";
 
 export default function UserList() {
     const [users, setUsers] = useState([])
+
     const [showCreate, setShowCreate] = useState(false)
+
+
+    
     useEffect(() => {
         userService.getAll()
             .then(result => {
@@ -19,9 +23,13 @@ export default function UserList() {
             })
     }, [])
 
-    const addUserClickHandler = () => {
+    const createUserClickHandler = () => {
         setShowCreate(true)
 
+    }
+
+    const closeCreateUserClickHandler = () =>{
+        setShowCreate(false)
     }
     return (
         <>
@@ -30,7 +38,7 @@ export default function UserList() {
                 <Search />
                 {/* Table component */}
                 {/* Create/Edit Form component  */}
-                {showCreate && <UserCreate />}
+                {showCreate && <UserCreate  onClose={closeCreateUserClickHandler}/>}
                 <div className="table-wrapper">
                     <div className="overlays">
                         {/* Overlap components  */}
@@ -190,7 +198,7 @@ export default function UserList() {
                     </table>
                 </div>
                 {/* New user button  */}
-                <button className="btn-add btn" onClick={addUserClickHandler}>Add new user</button>
+                <button className="btn-add btn" onClick={createUserClickHandler}>Add new user</button>
                 {/* Pagination component  */}
                 <Pagination />
             </section>
