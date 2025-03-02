@@ -15,7 +15,7 @@ export default function UserList() {
     const [showCreate, setShowCreate] = useState(false)
 
 
-    
+
     useEffect(() => {
         userService.getAll()
             .then(result => {
@@ -28,8 +28,26 @@ export default function UserList() {
 
     }
 
-    const closeCreateUserClickHandler = () =>{
+    const closeCreateUserClickHandler = () => {
         setShowCreate(false)
+    }
+
+    const saveCreateUserClickHandler = async (e) => {
+        //Stop default refresh
+        e.preventDefault()
+           //get Form data 
+        const formData = new FormData(e.target)
+        const userData = Object.fromEntries(formData)
+
+        //create new user on server 
+        const newUser = await userService.create(userData)    
+
+        //update local state
+        setUsers(state =>[...state,newUser])
+
+        //close modal
+        setShowCreate(false)
+
     }
     return (
         <>
@@ -38,7 +56,12 @@ export default function UserList() {
                 <Search />
                 {/* Table component */}
                 {/* Create/Edit Form component  */}
-                {showCreate && <UserCreate  onClose={closeCreateUserClickHandler}/>}
+                {showCreate &&
+                    <UserCreate
+                        onClose={closeCreateUserClickHandler}
+                        onSave={saveCreateUserClickHandler}
+                    />
+                }
                 <div className="table-wrapper">
                     <div className="overlays">
                         {/* Overlap components  */}

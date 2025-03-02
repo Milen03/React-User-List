@@ -6,5 +6,17 @@ export default {
         const result = await response.json()
         const user = Object.values(result)
         return user
-    }
+    },
+    async create(userData){
+        const response = await fetch(baseUrl,{
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        const result = response.json()
+
+        return result
+    } 
 }
