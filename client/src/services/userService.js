@@ -1,4 +1,4 @@
-const baseUrl = 'http://lacalhost:3030/jsonstore/users'
+const baseUrl = 'http://localhost:3030/jsonstore/users'
 
 export default {
     async getAll() {
