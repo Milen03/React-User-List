@@ -5,23 +5,32 @@ import userService from "../services/userService.js";
 import Pagination from "./Pagination.jsx";
 import UserListItem from "./UserListItem.jsx";
 import Search from "./Search.jsx";
+import UserCreate from "./UserCreate.jsx";
 
 
 
 export default function UserList() {
-    const [users,setUsers] = useState([])
+    const [users, setUsers] = useState([])
+    const [showCreate, setShowCreate] = useState(false)
     useEffect(() => {
         userService.getAll()
-        .then(result =>{
-            setUsers(result)
-        })
+            .then(result => {
+                setUsers(result)
+            })
     }, [])
+
+    const addUserClickHandler = () => {
+        setShowCreate(true)
+
+    }
     return (
         <>
             <section className="card users-container">
                 {/* Search bar component */}
                 <Search />
                 {/* Table component */}
+                {/* Create/Edit Form component  */}
+                {showCreate && <UserCreate />}
                 <div className="table-wrapper">
                     <div className="overlays">
                         {/* Overlap components  */}
@@ -172,16 +181,16 @@ export default function UserList() {
                         </thead>
                         <tbody>
                             {/* Table row component */}
-                           
-                            {users.map(user => <UserListItem 
-                            key={user._id}
-                            {...user}
+
+                            {users.map(user => <UserListItem
+                                key={user._id}
+                                {...user}
                             />)}
                         </tbody>
                     </table>
                 </div>
                 {/* New user button  */}
-                <button className="btn-add btn">Add new user</button>
+                <button className="btn-add btn" onClick={addUserClickHandler}>Add new user</button>
                 {/* Pagination component  */}
                 <Pagination />
             </section>
