@@ -6,6 +6,7 @@ import Pagination from "./Pagination.jsx";
 import UserListItem from "./UserListItem.jsx";
 import Search from "./Search.jsx";
 import UserCreate from "./UserCreate.jsx";
+import UserInfo from "./UserInfo.jsx";
 
 
 
@@ -14,7 +15,7 @@ export default function UserList() {
 
     const [showCreate, setShowCreate] = useState(false)
 
-
+    const [userIdInfo,setUserIdInfo] = useState(null)
 
     useEffect(() => {
         userService.getAll()
@@ -47,8 +48,13 @@ export default function UserList() {
 
         //close modal
         setShowCreate(false)
-
     }
+
+    const userInfoClickHandler =(userId)=>{
+
+        setUserIdInfo(userId)
+    }
+    
     return (
         <>
             <section className="card users-container">
@@ -62,6 +68,11 @@ export default function UserList() {
                         onSave={saveCreateUserClickHandler}
                     />
                 }
+
+                {userIdInfo && (
+                    <UserInfo
+                    userId={userIdInfo}
+                    />)}
                 <div className="table-wrapper">
                     <div className="overlays">
                         {/* Overlap components  */}
@@ -215,6 +226,7 @@ export default function UserList() {
 
                             {users.map(user => <UserListItem
                                 key={user._id}
+                                onInfoClick={userInfoClickHandler}
                                 {...user}
                             />)}
                         </tbody>
