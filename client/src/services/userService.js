@@ -8,12 +8,18 @@ export default {
         return user
     },
     async create(userData){
+        const {country,city,street,streetNumber,postData} = userData
+        
+        postData.address = {country,city,street,streetNumber}
+        postData.createAt = new Date().toISOString()
+        postData.updatedAt = new Date().toISOString()
+
         const response = await fetch(baseUrl,{
             method:'POST',
             headers:{
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify(postData) // !!!<==!!!   userData
         })
         const result = response.json()
 
