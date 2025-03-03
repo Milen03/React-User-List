@@ -7,6 +7,7 @@ import UserListItem from "./UserListItem.jsx";
 import Search from "./Search.jsx";
 import UserCreate from "./UserCreate.jsx";
 import UserInfo from "./UserInfo.jsx";
+import UserDelete from "./UserDelete.jsx";
 
 
 
@@ -15,7 +16,9 @@ export default function UserList() {
 
     const [showCreate, setShowCreate] = useState(false)
 
-    const [userIdInfo,setUserIdInfo] = useState(null)
+    const [userIdInfo, setUserIdInfo] = useState(null)
+
+    const [userIdDelete, setUserIdDelete] = useState(null)
 
     useEffect(() => {
         userService.getAll()
@@ -36,29 +39,49 @@ export default function UserList() {
     const saveCreateUserClickHandler = async (e) => {
         //Stop default refresh
         e.preventDefault()
-           //get Form data 
+        //get Form data 
         const formData = new FormData(e.target)
         const userData = Object.fromEntries(formData)
 
         //create new user on server 
-        const newUser = await userService.create(userData)    
+        const newUser = await userService.create(userData)
 
         //update local state
-        setUsers(state =>[...state,newUser])
+        setUsers(state => [...state, newUser])
 
         //close modal
         setShowCreate(false)
     }
 
-    const userInfoClickHandler =(userId)=>{
+    const userInfoClickHandler = (userId) => {
 
         setUserIdInfo(userId)
     }
-    const userInfoCloseHandler = ()=>{
+    const userInfoCloseHandler = () => {
 
         setUserIdInfo(null)
     }
-    
+
+    const userDeleteClickhandler = (userId) => {
+
+        setUserIdDelete(userId)
+    }
+
+    const userDeleteCloseHandler = () => {
+        setUserIdDelete(null)
+    }
+
+    const userDeleteHandler = async () => {
+        //Delete request to server
+        await userService.delete(userIdDelete)
+
+        //Delete From local state
+        setUsers(state => state.filter(user => user._id !== userIdDelete))
+
+        //Close modal
+        setUserIdDelete(null)
+    }
+
     return (
         <>
             <section className="card users-container">
@@ -75,9 +98,17 @@ export default function UserList() {
 
                 {userIdInfo && (
                     <UserInfo
-                    userId={userIdInfo}
-                    onClose={userInfoCloseHandler}
+                        userId={userIdInfo}
+                        onClose={userInfoCloseHandler}
                     />)}
+
+
+                {userIdDelete && <UserDelete
+                    onClose={userDeleteCloseHandler}
+                    onDelete={userDeleteHandler}
+                />}
+
+
                 <div className="table-wrapper">
                     <div className="overlays">
                         {/* Overlap components  */}
@@ -232,6 +263,7 @@ export default function UserList() {
                             {users.map(user => <UserListItem
                                 key={user._id}
                                 onInfoClick={userInfoClickHandler}
+                                onDeleteClick={userDeleteClickhandler}
                                 {...user}
                             />)}
                         </tbody>
